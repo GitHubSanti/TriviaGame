@@ -1,110 +1,116 @@
 var Questionaire = {
-	clockRunning: false,
-	time: 120, // Set to 10 mins | 600 secs
-	numberCorrect: 0,
-	numberIncorrect: 0,
-	questionBank: [{}],
-	answerKey: [{
-			QuestionCode: "SuperSonicsCity",
-			Answer: "Seattle"
-		},
-		{
-			QuestionCode: "",
-			Answer: ""
-		},
-		{
-			QuestionCode: "",
-			Answer: ""
-		},
-		{
-			QuestionCode: "",
-			Answer: ""
-		}
+  clockRunning: false,
+  time: 5, // Set to 10 mins | 600 secs
+  numberCorrect: 0,
+  numberIncorrect: 0,
+  questionBank: [{}],
+  answerKey: [
+    {
+      QuestionCode: "SuperSonicsCity",
+      Answer: "Seattle"
+    },
+    {
+      QuestionCode: "",
+      Answer: ""
+    },
+    {
+      QuestionCode: "",
+      Answer: ""
+    },
+    {
+      QuestionCode: "",
+      Answer: ""
+    }
   ],
   // To be incorporated later to randomize questions and display questions one at a time
-	multipleChoiceQuestion: function (Question, id, name, AnswerChoices) {
-		var newContainer = $("<div>").addClass("container");
-		// Create new div element | Add Bootstrap classes to div element |
-		var newDiv = $("<div>")
-			.addClass("custom-control")
-			.addClass("custom-radio");
-		// Create input element to append to div element | Add Bootstrap classes to div element | Add type, id, name attributes
-		var newInput = $("<input>")
-			.addClass("custom-control-input")
-			.attr("type", "radio")
-			.attr("id", id)
-			.attr("name", name);
-		// Create new label element | Add Bootstrap classes to label element | Add for attribute | Add answer choice
-		var newLabel = $("<label>")
-			.addClass("custom-control-label")
-			.attr("for", id)
-			.text("");
-		// Add for attribute
-		newLabel.text();
-	},
+  multipleChoiceQuestion: function(Question, id, name, AnswerChoices) {
+    var newContainer = $("<div>").addClass("container");
+    // Create new div element | Add Bootstrap classes to div element |
+    var newDiv = $("<div>")
+      .addClass("custom-control")
+      .addClass("custom-radio");
+    // Create input element to append to div element | Add Bootstrap classes to div element | Add type, id, name attributes
+    var newInput = $("<input>")
+      .addClass("custom-control-input")
+      .attr("type", "radio")
+      .attr("id", id)
+      .attr("name", name);
+    // Create new label element | Add Bootstrap classes to label element | Add for attribute | Add answer choice
+    var newLabel = $("<label>")
+      .addClass("custom-control-label")
+      .attr("for", id)
+      .text("");
+    // Add for attribute
+    newLabel.text();
+  },
 
-	trueFalseQuestion: function (name) {},
+  trueFalseQuestion: function(name) {},
 
-	startScreenWebPage: function () {
-		// Var initialHTML = `<div class="page-header text-center"></div>`;
-		//<h1 class="display-3">Trivia Game</h1> <p class="text-center">Answer as many questions as you can correctly!</p><hr></div>;
-		// return $("body").html("Hello <b>world!</b>");
-		return $("body").html(
-			`
+  startScreenWebPage: function() {
+    // Var initialHTML = `<div class="page-header text-center"></div>`;
+    //<h1 class="display-3">Trivia Game</h1> <p class="text-center">Answer as many questions as you can correctly!</p><hr></div>;
+    // return $("body").html("Hello <b>world!</b>");
+    return $("body").html(
+      `
 <div class="text-center page-header">
 </div>
 <h1 class="display-3 text-center">Trivia Game</h1>
 <p class="text-center">Answer as many questions as you can correctly and test your NBA knowledge!</p>
-<p class="text-center" id="displayTime">You will have 2 mins to complete the form.</p>
+<p class="text-center" id="displayTime">You will have 2 mins to complete the quiz.</p>
 <hr>
 <div class="container text-center border">
    <button id="startGame" type="button" class="btn btn-secondary">Start</button>
 </div>
 		`
-		);
-	},
-	timerCountDown: function () {
-		// DONE: Use setInterval to start the count here and set the clock to running.
-		if (!Questionaire.clockRunning) {
-			intervalId = setInterval(Questionaire.count, 1000);
-			Questionaire.clockRunning = true;
-		}
-	},
+    );
+  },
+  timerCountDown: function() {
+    // DONE: Use setInterval to start the count here and set the clock to running.
+    if (!Questionaire.clockRunning) {
+      intervalId = setInterval(Questionaire.count, 1000);
+      Questionaire.clockRunning = true;
+    }
+  },
 
-	count: function () {
-		// DONE: increment time by 1, remember we cant use "this" here.
-		Questionaire.time--;
+  count: function() {
+    // DONE: increment time by 1, remember we cant use "this" here.
+    Questionaire.time--;
 
-		// DONE: Get the current time, pass that into the Questionaire.timeConverter function,
-		//       and save the result in a variable.
-		var converted = Questionaire.timeConverter(Questionaire.time);
-		console.log(converted);
+    // DONE: Get the current time, pass that into the Questionaire.timeConverter function,
+    //       and save the result in a variable.
+    var converted = Questionaire.timeConverter(Questionaire.time);
+    console.log(converted);
 
-		// DONE: Use the variable we just created to show the converted time in the "display" div.
-		$("#displayTime").text(converted);
-	},
+    // DONE: Use the variable we just created to show the converted time in the "display" div.
+    $("#displayTime").text(converted);
 
-	timeConverter: function (t) {
-		var minutes = Math.floor(t / 60);
-		var seconds = t - minutes * 60;
+    if (Questionaire.time == 0) {
+      clearInterval(intervalId);
+      Questionaire.resultsWebPage();
+    }
+  },
 
-		if (seconds < 10) {
-			seconds = "0" + seconds;
-		}
+  timeConverter: function(t) {
+    var minutes = Math.floor(t / 60);
+    var seconds = t - minutes * 60;
 
-		if (minutes === 0) {
-			minutes = "00";
-		} else if (minutes < 10) {
-			// minutes = "0" + minutes; to incorporate
-		}
+    if (seconds < 10) {
+      seconds = "0" + seconds;
+    }
 
-		return minutes + ":" + seconds;
-	},
+    if (minutes === 0) {
+      minutes = "00";
+    } else if (minutes < 10) {
+      // minutes = "0" + minutes; to incorporate
+    }
+
+    return minutes + ":" + seconds;
+  },
 
   // Displays Questions
-	formWebPage: function () {
-		return $("body").html(
-			`
+  formWebPage: function() {
+    return $("body").html(
+      `
       <div class="text-center page-header">
 </div>
 <h1 class="display-3 text-center">Trivia Game</h1>
@@ -309,11 +315,11 @@ var Questionaire = {
    <button id="submitQuiz" type="button" class="btn btn-success">Submit</button>
 </div>
       `
-		);
+    );
   },
-  
+
   // Display results page
-  resultsWebPage: function () {
+  resultsWebPage: function() {
     return $("body").html(
       `
       <div class="text-center page-header"></div>
@@ -339,31 +345,33 @@ var Questionaire = {
    </div>
 </div>
       `
-    )
+    );
   }
 };
-$(document).ready(() => {
-	//   console.log("function executed with arrow notation");
-	Questionaire.startScreenWebPage();
+$(document).ready(function() {
+  //   console.log("function executed with arrow notation");
+  Questionaire.startScreenWebPage();
 
-	$(document).on("click", "#startGame", function () {
-		// Begin timer and display form
-		Questionaire.timerCountDown();
-		Questionaire.formWebPage();
-	});
+  $(document).on("click", "#startGame", function() {
+    // Begin timer and display form
+    Questionaire.timerCountDown();
+    Questionaire.formWebPage();
+  });
+  // If time runs out display results page
+  // if ($("#displayTime").html() == "00:00") {
+  //   clearInterval(intervalId);
+  //   console.log("No Time Left!");
+  //   Questionaire.resultsWebPage();
+  // }
 
-	$(document).on("click", ".custom-control-input", function () {
-		console.log(this);
-	});
+  $(document).on("click", ".custom-control-input", function() {
+    console.log(this);
+  });
 
-	// If time runs out display results page
-	if (Questionaire.time == 0) {
-		Questionaire.resultsWebPage();
-	}
-  
   // Display results page if user click submit button
-	$(document).on("click", "#submitQuiz", function () {
+  $(document).on("click", "#submitQuiz", function() {
+    clearInterval(intervalId);
     console.log(this);
     Questionaire.resultsWebPage();
-	});
+  });
 });
