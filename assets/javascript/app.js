@@ -1,6 +1,6 @@
 var Questionaire = {
   clockRunning: false,
-  time: 5, // Set to 10 mins | 600 secs
+  time: 120, // Set to 2 mins | 120 secs
   numberCorrect: 0,
   numberIncorrect: 0,
   questionBank: [{}],
@@ -84,8 +84,11 @@ var Questionaire = {
     // DONE: Use the variable we just created to show the converted time in the "display" div.
     $("#displayTime").text(converted);
 
+    // If time runs out display results webpage
     if (Questionaire.time == 0) {
       clearInterval(intervalId);
+      // Insert code to check user's answers
+
       Questionaire.resultsWebPage();
     }
   },
@@ -99,7 +102,7 @@ var Questionaire = {
     }
 
     if (minutes === 0) {
-      minutes = "00";
+      minutes = "0";
     } else if (minutes < 10) {
       // minutes = "0" + minutes; to incorporate
     }
@@ -357,21 +360,24 @@ $(document).ready(function() {
     Questionaire.timerCountDown();
     Questionaire.formWebPage();
   });
-  // If time runs out display results page
-  // if ($("#displayTime").html() == "00:00") {
-  //   clearInterval(intervalId);
-  //   console.log("No Time Left!");
-  //   Questionaire.resultsWebPage();
-  // }
 
   $(document).on("click", ".custom-control-input", function() {
     console.log(this);
+    console.log($(this).attr("id"));
+    console.log($(this).is(':checked'))
   });
 
   // Display results page if user click submit button
   $(document).on("click", "#submitQuiz", function() {
     clearInterval(intervalId);
-    console.log(this);
+
+    $("input").each(function() {
+      // alert($(this).text(this));
+      if ($(this).is(":checked")) {
+        console.log(this);
+      }
+    });
+
     Questionaire.resultsWebPage();
   });
 });
